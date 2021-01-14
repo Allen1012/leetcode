@@ -36,10 +36,27 @@ public class PopulatingNextRightPointersInEachNode {
         if(root.left == null){
             return root;
         }
-        ArrayList<Node> list = new ArrayList<>();
-        list.add(root);
-        bfs(list);
+        connectTwoNode(root.left,root.right);
+//        ArrayList<Node> list = new ArrayList<>();
+//        list.add(root);
+//        bfs(list);
         return root;
+    }
+
+    public void connectTwoNode(Node n1,Node n2){
+        if(n1 == null || n2 == null){
+            return;
+        }
+
+        /**** 前序遍历位置 ****/
+        // 将传入的两个节点连接
+        n1.next = n2;
+
+        // 连接相同父节点的两个子节点
+        connectTwoNode(n1.left,n1.right);
+        connectTwoNode(n2.left,n2.right);
+        // 连接跨越父节点的两个子节点
+        connectTwoNode(n1.right,n2.left);
     }
 
     public void bfs(ArrayList<Node> list){
