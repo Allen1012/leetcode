@@ -57,7 +57,7 @@ public class LinkedListCycleII {
 
     class ListNode {
         int val;
-        LinkedListCycle.ListNode next;
+        ListNode next;
         ListNode(int x) {
             val = x;
             next = null;
