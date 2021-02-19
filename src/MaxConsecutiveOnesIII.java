@@ -40,8 +40,9 @@ public class MaxConsecutiveOnesIII {
         System.out.println(t);
     }
     public int longestOnes(int[] A, int K) {
+        System.out.println("A.length: "+A.length);
         if(K== 0){
-            return longest(A);
+            return longest(A,0,A.length -1);
         }
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < A.length; i++) {
@@ -61,7 +62,7 @@ public class MaxConsecutiveOnesIII {
             A[list.get(j)] = 1;
             System.out.println(list.get(j));
         }
-        int max = longest(A);
+        int max = longest(A,0,A.length-1);
 
         for (int i = 1; i < list.size() - K +1; i++) {
             A[list.get(i-1)] = 0;
@@ -70,16 +71,20 @@ public class MaxConsecutiveOnesIII {
             A[list.get(i-1+K)] = 1;
             System.out.println(list.get(i-1+K));
             //计算最大值
-            max = Math.max(max,longest(A));
+            if(list.size() >= i+1+K && list.get(i-1+K) + 2 == list.get(i+1+K)) {
+                continue;
+            }
+
+            max = Math.max(max,longest(A,list.get(i-1),list.get( Math.min(list.size() -1 , i-1+K))));
 
         }
         return  max;
     }
 
-    public int longest(int[] A){
+    public int longest(int[] A,int start,int end){
         int max = 0;
         int temp ;
-        for (int i = 0; i < A.length; i++) {
+        for (int i = start; i <= end; i++) {
             if(A[i] == 1){
                 temp = 1;
                 while (i+1<A.length && A[i+1] == 1){
