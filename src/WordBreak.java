@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +31,21 @@ import java.util.List;
  * https://leetcode-cn.com/problems/word-break/
  */
 public class WordBreak {
-    HashMap<Integer,Boolean> map = new HashMap<Integer, Boolean>();
+
+    public static void main(String[] args) {
+        WordBreak w = new WordBreak();
+        String s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        ArrayList<String> wordDict = new ArrayList<>();
+        List list = Arrays.asList("aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa","ba");
+        wordDict.addAll(list);
+        boolean ret =  w.wordBreak(s,wordDict);
+        if(ret ){
+            System.out.println("true");
+        }
+
+    }
+
+    HashMap<Integer,Integer> map = new HashMap<Integer, Integer>();
     ArrayList<Integer> lens = new ArrayList<>();
     boolean canFind = false;
     public boolean wordBreak(String s, List<String> wordDict) {
@@ -58,6 +73,7 @@ public class WordBreak {
 
 
     public void getWorkBreak(String s,List<String> wordDict){
+        System.out.println(map.toString());
         if(canFind == true){
             return;
         }
@@ -66,21 +82,29 @@ public class WordBreak {
             return;
         }
         if(map.containsKey(s.length())){
-            return;
+            if(map.get(s.length()) == -1){
+                return;
+            }
         }
 
+        boolean flg = false;
         System.out.println("s = "+s);
         for (int i = 0; i < lens.size(); i++) {
             if(s.length() >= lens.get(i)){
                 String str = s.substring(0,lens.get(i));
                 System.out.println("str : "+str);
-                if( wordDict.contains(str)){
-
+                String sub = s.substring(lens.get(i));
+                if( wordDict.contains(str) && (!map.containsKey(sub.length()) )){
+                    flg = true;
                     System.out.println("contain str : "+str);
-                    getWorkBreak( s.substring(lens.get(i)),wordDict);
+                    map.put(s.substring(lens.get(i)).length(),1);
+                    getWorkBreak( sub,wordDict);
 
                 }
             }
+        }
+        if(flg == false){
+            map.put(s.length(),-1);
         }
     }
 }
