@@ -67,6 +67,7 @@ public class ZigzagConversion {
             ind += (numRows -1)*2;
         }
         StringBuffer str = new StringBuffer();
+        str.append(s.charAt(0));
         int length = numRows;
         while (length >0){
 //            System.out.println("num" + numRows);
@@ -98,7 +99,7 @@ public class ZigzagConversion {
         }
         System.out.println(str.toString());
 //        System.out.println(list.toString());
-        return s;
+        return str.toString();
     }
 }
 
