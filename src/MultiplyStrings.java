@@ -23,34 +23,78 @@
 public class MultiplyStrings {
     public static void main(String[] args) {
         MultiplyStrings m = new MultiplyStrings();
-        String num1 = "1234";
-        String num2 = "234";
+        String num1 = "1";
+        String num2 = "2";
         String ret = m.multiply(num1,num2);
     }
+    int[] s ;
     public String multiply(String num1, String num2) {
         if(num1.equals("0") || num2.equals("0")){
             return "0";
         }
+        s = new int[num1.length()+num2.length()];
 
-        char[] s = new char[num1.length()+num2.length()];
         int sum = 0;
-        int ten = 1;
+        int ten = 0;
 
         for (int i = num1.length()-1; i >= 0; i--) {
             System.out.println(num1.charAt(i));
-            int ten2 = 1;
+            int ten2 = 0;
             for (int j = num2.length()-1; j >= 0 ; j--) {
                 int a1 = num1.charAt(i) - '0';
                 int a2 = num2.charAt(j) - '0';
 
-                sum += a1*a2*ten*ten2;
+//                sum += a1*a2* ten*ten2;
+                addToArr(a1*a2,ten+ten2);
 
                 System.out.println(a1*a2);
-                ten2 *= 10;
+                ten2 += 1;
             }
-            ten *= 10;
+            ten += 1;
         }
-        System.out.println("ret =" + sum);
+
+        StringBuffer str = new StringBuffer();
+        if(s[s.length-1] >0){
+            str.append(""+s[s.length-1]);
+            System.out.printf(""+s[s.length-1]);
+        }
+        for (int i = s.length-2; i >=0; i--) {
+            str.append(""+s[i]);
+            System.out.printf(""+s[i]);
+        }
+        System.out.println("ret =" + str.toString());
         return "";
     }
+
+    public void addToArr(int n,int ind){
+        s[ind] += n;
+        while (s[ind]/10 >0){
+            int ten = s[ind]/10;
+            s[ind] = s[ind]%10;
+            ind++;
+            s[ind] += ten;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
