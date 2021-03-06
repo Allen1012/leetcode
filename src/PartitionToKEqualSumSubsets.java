@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+
 /**
  * 698. 划分为k个相等的子集
  * 给定一个整数数组  nums 和一个正整数 k，找出是否有可能把这个数组分成 k 个非空子集，其总和都相等。
@@ -17,51 +21,90 @@
  * https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/
  */
 public class PartitionToKEqualSumSubsets {
+    public static void main(String[] args) {
+        PartitionToKEqualSumSubsets t = new PartitionToKEqualSumSubsets();
+        int[] nums = {18,20,39,73,96,99,101,111,114,190,207,295,471,649,704,1037};
+        int k = 4;
+        boolean ret =  t.canPartitionKSubsets(nums,k);
+        if(ret ){
+            System.out.println("true");
+        }
+    }
+
     int[] list;
     public boolean canPartitionKSubsets(int[] nums, int k) {
         int sum = 0;
         int ave ;
+        int max = 0;
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
+            if(max < nums[i]){
+                max = nums[i];
+            }
         }
         if(sum % k != 0){
             return false;
         }
         ave = sum / k;
+        if(max > ave){
+            return false;
+        }
         list = new int[k];
-        for (int i = 0; i < nums.length; i++) {
-            if(nums[i] > ave){
-                return false;
-            }
-            for (int j = 0; j < k; j++) {
-                if(list[j] + nums[i] > ave){
-                    continue;
-                }else {
-                    list[j] += nums[i];
-                    break;
-                }
-            }
+        HashSet<Integer> set = new HashSet<>();
+        for (int i = 0; i < k; i++) {
+            set.add(i);
         }
 
-
-        return false;
+        hui(nums,0,ave,set);
+        return find;
     }
 
-    public boolean hui(int[] nums,int x,int y,int ave,int k){
-        for (int i = x; i < nums.length; i++) {
-            if(nums[i] > ave){
-                return false;
+    boolean find = false;
+    int num = 0;
+    public void hui(int[] nums,int x,int ave,HashSet<Integer> set){
+        num++;
+        System.out.println(x  + "find xxxxxxxxxxoooooooooooooooooooooooooxxxxxxxx11111111   " + num);
+        if(find || x == nums.length){
+            return;
+        }
+
+       // System.out.println("qweqeqqrqrqrqrqtwtwtwtwtrrwrww" + nums[x]);
+
+        Iterator<Integer> it = set.iterator();
+        while (it.hasNext()){
+
+            int j = it.next();
+
+            if(x == nums.length - 1 &&  list[j] + nums[x] == ave) {
+                find=true;
+                return ;
             }
-            for (int j = y; j < k; j++) {
-                if(list[j] + nums[i] > ave){
-                    continue;
-                }else {
-                    list[j] += nums[i];
-                    break;
+            System.out.println(list[j] + nums[x]);
+            if(list[j] + nums[x] > ave){
+                System.out.println(set.toString());
+                continue;
+            }else {
+                list[j] += nums[x];
+                System.out.println(list[j] );
+         //       System.out.println("qweqeqqrqrqrqrqtwtwtwtwtrrwrww======" + list[j]);
+           //     System.out.println("qweqeqqrqrqrqrqtwtwtwtwtrrwrww======ave" + ave);
+                if(list[j] == ave){
+                    System.out.println(list[j]  + "find aaaa");
+                    HashSet<Integer> s = new HashSet<>();
+                    s.addAll(set);
+                    s.remove(j);
+                    System.out.println(s);
+                    hui(nums,x+1,ave,s);
+                }else{
+                    System.out.println(x  + "find xxxxxxxxxxxxxxxxxx" + x);
+                    hui(nums,x+1,ave,set);
                 }
+                list[j] -= nums[x];
+                System.out.println(x  + "find xxxxxxxxxxooxx============-----list j " + list[j]);
             }
         }
-        
+
+        System.out.println(x  + "find xxxxxxxxxxoooooooooooooooooooooooooxxxxxxxx============" + x);
     }
 }
 
