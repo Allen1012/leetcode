@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Arrays;
 
 /**
  * 698. 划分为k个相等的子集
@@ -23,11 +21,13 @@ import java.util.Iterator;
 public class PartitionToKEqualSumSubsets {
     public static void main(String[] args) {
         PartitionToKEqualSumSubsets t = new PartitionToKEqualSumSubsets();
-        int[] nums = {18,20,39,73,96,99,101,111,114,190,207,295,471,649,704,1037};
-        int k = 4;
+        int[] nums = {10,10,10,7,7,7,7,7,7,6,6,6};
+        int k = 3;
         boolean ret =  t.canPartitionKSubsets(nums,k);
         if(ret ){
             System.out.println("true");
+        }else {
+            System.out.println("false");
         }
     }
 
@@ -36,6 +36,7 @@ public class PartitionToKEqualSumSubsets {
         int sum = 0;
         int ave ;
         int max = 0;
+        if (k > nums.length) return false;
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
             if(max < nums[i]){
@@ -50,61 +51,60 @@ public class PartitionToKEqualSumSubsets {
             return false;
         }
         list = new int[k];
-        HashSet<Integer> set = new HashSet<>();
-        for (int i = 0; i < k; i++) {
-            set.add(i);
+
+        /* 降序排序 nums 数组 */
+        Arrays.sort(nums);
+        int i = 0, j = nums.length - 1;
+        for (; i < j; i++, j--) {
+            // 交换 nums[i] 和 nums[j]
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
         }
 
-        hui(nums,0,ave,set);
+        hui(nums,0,0,ave,k);
         return find;
     }
 
     boolean find = false;
-    int num = 0;
-    public void hui(int[] nums,int x,int ave,HashSet<Integer> set){
-        num++;
-        System.out.println(x  + "find xxxxxxxxxxoooooooooooooooooooooooooxxxxxxxx11111111   " + num);
+    public void hui(int[] nums,int x,int y,int ave,int k){
         if(find || x == nums.length){
             return;
         }
 
-       // System.out.println("qweqeqqrqrqrqrqtwtwtwtwtrrwrww" + nums[x]);
+        for (int i = 0; i < list.length; i++) {
+            System.out.printf(" " + list[i]);
+        }
+        System.out.println(" ");
 
-        Iterator<Integer> it = set.iterator();
-        while (it.hasNext()){
-
-            int j = it.next();
-
+        for (int j = y; j < k; j++) {
             if(x == nums.length - 1 &&  list[j] + nums[x] == ave) {
                 find=true;
                 return ;
             }
-            System.out.println(list[j] + nums[x]);
             if(list[j] + nums[x] > ave){
-                System.out.println(set.toString());
                 continue;
             }else {
                 list[j] += nums[x];
-                System.out.println(list[j] );
-         //       System.out.println("qweqeqqrqrqrqrqtwtwtwtwtrrwrww======" + list[j]);
-           //     System.out.println("qweqeqqrqrqrqrqtwtwtwtwtrrwrww======ave" + ave);
                 if(list[j] == ave){
-                    System.out.println(list[j]  + "find aaaa");
-                    HashSet<Integer> s = new HashSet<>();
-                    s.addAll(set);
-                    s.remove(j);
-                    System.out.println(s);
-                    hui(nums,x+1,ave,s);
-                }else{
-                    System.out.println(x  + "find xxxxxxxxxxxxxxxxxx" + x);
-                    hui(nums,x+1,ave,set);
+                    int tem = list[y];
+                    list[y] = ave;
+                    list[j] = tem;
+                    hui(nums,x+1,y+1,ave,k);
+                    //tem = list[j];
+                    list[y] = list[j];
+                    list[j] = ave;
+
+                    if(j + 1 < k && list[j+1] == 0 ){
+                        break;
+                    }
+                }else {
+                    hui(nums,x+1,y,ave,k);
                 }
                 list[j] -= nums[x];
-                System.out.println(x  + "find xxxxxxxxxxooxx============-----list j " + list[j]);
             }
         }
 
-        System.out.println(x  + "find xxxxxxxxxxoooooooooooooooooooooooooxxxxxxxx============" + x);
     }
 }
 
