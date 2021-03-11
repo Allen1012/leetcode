@@ -43,7 +43,6 @@ public class BasicCalculator {
         int num = 0;
         int flg = 1;
         int len = s.length();
-        StringBuffer stack = new StringBuffer();
         for (int i = 0; i < len; i++) {
             char c = s.charAt(i);
             if (c == '('){
