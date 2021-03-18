@@ -10,6 +10,7 @@
  * 输入: 1->2->3->4->5->NULL, m = 2, n = 4
  * 输出: 1->4->3->2->5->NULL
  * 通过次数113,131提交次数215,544
+ *
  * https://leetcode-cn.com/problems/reverse-linked-list-ii/
  */
 public class ReverseLinkedListII {
@@ -21,42 +22,40 @@ public class ReverseLinkedListII {
       ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
 
-    public ListNode reverseBetween(ListNode head, int left, int right) {
-        ListNode node = head;
-        ListNode nLeft;
-        while (node.val != left){
-            node = node.next;
-        }
-        nLeft = node;
-
-        node = node.next;
-        while (node.val != right){
-            ListNode t = node.next.next ;
-            node.next = node;
-            node = t;
-        }
-
-
-        while (node != null){
-            if(node.val == left){
-                ListNode t = node.next ;
-                node.next = node;
-                node = t;
-            }else if(node.val == right){
-
-            }else {
-                node = node.next;
+        public ListNode reverseBetween(ListNode head, int left, int right) {
+            if(left == right){
+                return head;
             }
+            ListNode prev = null;
+            ListNode cure = head;
+            ListNode l = null;
+            int ind = 1;
+            while (cure != null && ind != left){
+                l = cure ;
+                cure = cure.next;
+                ind++;
+            }
+            if(cure == null){
+                return head;
+            }
+
+            ListNode sl = cure ;
+            while (cure != null && ind != right){
+                ListNode next = cure.next ;
+                cure.next = prev;
+                prev = cure;
+                cure = next;
+                ind++;
+            }
+            // ListNode next = cure.next ;
+            sl.next = cure.next;
+            if(1 == left){
+                cure.next = prev;
+                return cure;
+            }
+            l.next = cure;
+            cure.next = prev;
+
+            return head;
         }
-        nLeft = node;
-
-
-
-
-
-        while (node.next.val != right){
-            node = node.next;
-        }
-        return head;
-    }
 }
